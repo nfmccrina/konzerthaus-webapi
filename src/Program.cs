@@ -14,12 +14,19 @@ namespace KonzertHausWebApi
     {
         public static void Main(string[] args)
         {
+            Configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .AddJsonFile("appsettings.Development.json", true)
+                .Build();
             BuildWebHost(args).Run();
         }
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
+                .UseUrls(Configuration?["urls"]?.Split(";"))
                 .Build();
+        
+        private static IConfiguration Configuration;
     }
 }
